@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+  <h1>Public Events</h1>
+  {% if upcoming_events %}
+  <div class="container mt-4">
+    <div class="row">
+      {% for event in upcoming_events %}
+      <div class="col">
+        <div class="card mt-4" style="width:18rem;">
+              {% if event.header_image %}
+                  <img class="card-img-top" src="{{ event.header_image.url }}" alt="Event image">
+              {% else %}
+                  <p>No image uploaded for this event.</p>
+              {% endif %}
+            <div class="card-body">
+                <h4>{{ event.title }}</h4>
+                <a href="{{ event.get_absolute_url }}" class="stretched-link"></a>
+            </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% else %}
+    <p>There are no events available.</p>
+  {% endif %}
+</div>
+
+<div class="container mt-4">
+  {% if past_events %}
+  <h1>Past Events</h1>
+  <div class="container mt-4">
+    <div class="row">
+      {% for event in past_events %}
+      <div class="col">
+        <div class="card mt-4" style="width:18rem;">
+              {% if event.header_image %}
+                  <img class="card-img-top" src="{{ event.header_image.url }}" alt="Event image">
+              {% else %}
+                  <p>No image uploaded for this event.</p>
+              {% endif %}
+            <div class="card-body">
+                <h4>{{ event.title }}</h4>
+                <a href="{{ event.get_absolute_url }}" class="stretched-link"></a>
+            </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

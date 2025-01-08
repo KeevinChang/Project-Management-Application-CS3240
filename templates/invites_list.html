@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="text-center my-4">Your Invites ({{ invites|length }})</h2>
+<div class="container">
+  {% if invites or True %}  
+    <div class="row">
+      {% for event in invites %}
+      <div class="col-md-4 mb-4">
+        <div class="card border-dark shadow">
+          <div class="card-body">
+            <h5 class="card-title text-dark">{{ event.name }}</h5>
+            <p class="card-text">Invited by: <strong>{{ event.owner.username }}</strong></p>
+            <form method="post">
+              {% csrf_token %}
+              <input type="hidden" name="event_id" value="{{ event.id }}">
+              <div class="d-flex justify-content-between">
+                <button type="submit" name="action" value="accept" class="btn btn-success btn-sm">
+                  <i class="fas fa-check"></i> Accept
+                </button>
+                <button type="submit" name="action" value="reject" class="btn btn-danger btn-sm">
+                  <i class="fas fa-times"></i> Reject
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+
+
+    </div>
+  {% else %}
+    <p class="text-center text-muted">No pending invites.</p>
+  {% endif %}
+</div>
+{% endblock %}

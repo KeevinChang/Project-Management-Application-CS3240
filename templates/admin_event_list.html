@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+  <h1>All Events</h1>
+  {% if event_list %}
+    <div class="container mt-4">
+      {% for event in event_list %}
+      <div class="col">
+        <div class="card mt-4" style="width:18rem;">
+              {% if event.header_image %}
+                  <img class="card-img-top" src="{{ event.header_image.url }}" alt="Event image">
+              {% else %}
+                  <p>No image uploaded for this event.</p>
+              {% endif %}
+            <div class="card-body">
+                <h4>{{ event.title }}</h4>
+                <a href="{{ event.get_absolute_url }}" class="stretched-link"></a>
+            </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>There are no events yet.</p>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,17 @@
+<h2>User Profile</h2>
+<p><strong>Username:</strong> {{ username }}</p>
+<p><strong>Email:</strong> {{ email }}</p>
+<p><strong>Nickname:</strong> {{ nickname }}</p>
+<p><strong>User Type:</strong> {{ user_type }}</p>
+
+<form method="POST">
+    {% csrf_token %}
+    <label for="nickname">Update Nickname:</label>
+    <input type="text" name="nickname" id="nickname" value="{{ nickname }}">
+    <button type="submit">Update Nickname</button>
+</form>
+
+<form method="POST" action="{% url 'delete_user' %}">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Delete All Information</button>
+</form>

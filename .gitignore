@@ -1,0 +1,9 @@
+# .gitignore
+.env
+db.sqlite3
+*.pyc
+projectb15/__pycache__/
+projectb15/migrations/__pycache__/
+users/__pycache__/
+users/migrations/__pycache__/
+venv/

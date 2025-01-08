@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% block content %}
+{% load socialaccount %}
+
+{% if not request.user.is_authenticated %}
+<div class="px-4 py-5 my-5 text-center" >
+    <div class="card shadow my-5" style="border-radius: 1rem; border: 1px solid black; padding-top: 30px; padding-bottom: 30px;">
+        <h1 class="display-5 fw-bold text-body-emphasis">Welcome to Project B15</h1>
+        <h4> An event management app for college students. </h4>
+
+        <div class="col-lg-6 mx-auto">
+            <p class="lead mb-4">
+                Keep track of all your events in one place, join events and invite others, store and manage event-related
+                files, and post messages to keep everyone up to date.</p>
+            <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                <a href="{% provider_login_url 'google' %}"><button type="button" class="btn btn-primary btn-lg px-4 mr-3" style="background-color: #004d76; border-color: #004d76;">Log in</button></a>
+                <a href="{% provider_login_url 'google' action='reauthenticate' %}"><button type="button" class="btn btn-outline-secondary btn-lg px-4">Sign up</button></a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% if request.user.is_authenticated %}
+<div style="padding-top: 85px;" class="text-center">
+    <div class="row justify-content-center">
+        <!-- User Info Card -->
+        <div class="card mr-3 shadow-sm" style="border-radius: 1rem; border: 1px solid black;">
+            <div class="card-body">
+                <h3 class="card-title font-weight-bold mb-4">My Info</h3>
+                <!-- First Cluster -->
+                <div class="mb-3">
+                    <p class="mb-1"><strong>Name:</strong> {{ user.socialaccount_set.all.0.extra_data.name }}</p>
+                    <p class="mb-1"><strong>Email:</strong> {{ user.email }}</p>
+                    <p class="mb-1"><strong>Nickname:</strong> {{ user.profile.nickname }}</p>
+                </div>
+
+                <!-- Second Cluster -->
+                <div class="mb-3">
+                    <p class="mb-1 text-muted small"><strong>Date Joined:</strong> {{ user.date_joined|date:"M d, Y, g:i a" }}</p>
+                    {% if request.user.groups.all.0.name == 'Admin' %}
+                        <p class="mb-1 text-muted small"><strong>Role:</strong> You are an Admin</p>
+                    {% else %}
+                        <p class="mb-1 text-muted small"><strong>Role:</strong> You are a regular User.</p>
+                    {% endif %}
+                </div>
+
+                <!-- Profile Update Button -->
+                <div class="mb-2">
+                    <a href="{% url 'update_user_fields' %}" class="btn btn-warning btn-sm" style="background-color: #eca815; border-color: #eca815; color: white">Edit My Profile</a><br>
+                </div>
+
+                <!-- Delete User Button -->
+            <!--    <form method="POST" action="{% url 'delete_user' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-sm">Delete My Account</button>
+                </form> -->
+
+                <!-- Logout Button -->
+                <form method="POST" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-link">Log out</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Events This Week Card -->
+        {% if request.user.groups.all.0.name != 'Admin' %}
+        <div class="card shadow-sm" style="border-radius: 1rem; border: 1px solid black;">
+            <div class="card-body">
+                <h3 class="card-title font-weight-bold mb-4">Upcoming Events</h3>
+                {% if events_this_week %}
+                    <ul class="list-group list-group-flush">
+                        {% for event in events_this_week %}
+                            <li class="list-group-item">
+                                <strong>{{ event.title }}</strong><br>
+                                {{ event.date|date:"D, M d, Y" }}<br>
+                                {{ event.start_time }} - {{ event.end_time }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="card-text">No events scheduled for this week.</p>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if request.user.groups.all.0.name != 'Admin' %}
+        <div class="card shadow-sm ml-3" style="border-radius: 1rem; border: 1px solid black;">
+            <div class="card-body">
+                <h3 class="card-title font-weight-bold mb-4">My Invites</h3>
+                {% if invites %}
+                    <ul class="list-group list-group-flush">
+                        {% for invite in invites %}
+                            <li class="list-group-item">
+                                <strong>{{ invite.title }}</strong><br>
+                                {{ invite.date|date:"D, M d, Y" }}<br>
+                                {{ invite.start_time }} - {{ invite.end_time }}
+
+                                <form method="POST" action="{% url 'home' %}" style="display: inline;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="event_id" value="{{ invite.id }}">
+                                <button type="submit" name="accept_button" value="accept_button" class="btn btn-success btn-sm">
+                                    <i class="fas fa-check"></i> Accept
+                                  </button>
+                                  <button type="submit" name="reject_button" value="reject_button" class="btn btn-danger btn-sm">
+                                    <i class="fas fa-times"></i> Decline
+                                </button>
+                                </form>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="card-text">No invitations pending.</p>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

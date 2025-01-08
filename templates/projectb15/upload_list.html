@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Uploaded Files</h2>
+{% if files %}
+    <ul>
+        {% for file in files %}
+            <li>
+                <b>Title:</b> {{ file.title }}<br>
+                <b>Description:</b> {{ file.description }}</em><br>
+                <b>Keywords:</b> {{ file.keywords }}<br>
+                <b>Submitted at:</b> {{ file.uploaded_at|date:"Y-m-d H:i" }}<br>
+
+        <form method="POST" action="">
+            {% csrf_token %}
+          <button type="submit" name="delete_button">Delete file</button>
+        </form>
+                <br>
+            </li>
+        {% endfor %}   
+    </ul>
+    
+{% else %}
+    <p>There are no uploaded files available.</p>
+{% endif %}
+<a href="{% url 'events'%}"> Back to event </a>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Update Your Profile</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" class="form-control" value="{{ email }}">
+        </div>
+        <div class="form-group">
+            <label for="nickname">Nickname:</label>
+            <input type="text" id="nickname" name="nickname" class="form-control" value="{{ nickname }}">
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-3" style="background-color: #004d76; border-color: #004d76;">Save Changes</button>
+        <button type="submit" name="delete_account" class="btn btn-danger mt-3 float-right">Delete My Account</button>
+             
+        
+        <a href="{% url 'home' %}" class="btn btn-secondary mt-3">Cancel</a>
+    </form>
+</div>
+{% endblock %}

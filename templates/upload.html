@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-sm mb-4" style="border-radius: 1rem; border: 1px solid black;">
+        <div class="card-header">
+            <h4>Upload File</h4>
+        </div>
+            <div class="container my-3">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <div style="margin-bottom: 15px;">
+                        <label for="id_title">Title:</label>
+                        {{ form.title }}<br>
+                    </div>
+                    
+                    <div style="margin-bottom: 15px;">
+                        <label for="id_description">Description:</label>
+                        {{ form.description }}<br>
+                    </div>
+                    
+                    <div style="margin-bottom: 15px;">
+                        <label for="id_keywords">Keywords:</label>
+                    {{ form.keywords }}<br>
+                    </div>
+                    
+                    {{ form.file }}<br>
+                    <button type="submit" class="btn btn-info mt-3" style="background-color: #004d76; border-color: #004d76;">Upload</button>
+                </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
